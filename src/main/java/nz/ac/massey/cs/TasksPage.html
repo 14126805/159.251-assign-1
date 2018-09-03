@@ -1,0 +1,58 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+</head>
+
+<body>
+
+<div id="body">
+	<header>
+		<h1>Todos</h1>
+	</header>
+
+	<!--div id="content" wicket:id="contentComponent">content
+	</div-->
+
+	<h2>New Task</h2>
+
+
+	<form wicket:id="entryForm">
+		<div><label>Name </label><input
+				wicket:id="name"
+				type="text" style="width: 15em" /></div>
+		<div><label>Description </label><input
+				wicket:id="description" type="text" style="width: 30em"
+		/></div>
+		<div><input type="submit" value="Add" /></div>
+	</form>
+	<hr>
+
+	<h2>Task List</h2>
+
+	<form wicket:id="listForm">
+
+	<table>
+		<tr wicket:id="task_list">
+			<td>
+				<input class="toggle" type="checkbox" wicket:id="completed" />
+				<span wicket:id="name">Name</span>
+				<span wicket:id="description">Description</span>
+
+			</td>
+		</tr>
+	</table>
+
+	</form>
+
+	<a href="#" wicket:id="selectAll">Select all</a>
+
+	<hr>
+	<footer>
+		<div id="datetime" wicket:id="datetime">
+		</div>
+	</footer>
+
+</div>
+</body>
+</html>
