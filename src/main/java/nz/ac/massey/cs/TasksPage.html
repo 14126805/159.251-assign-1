@@ -18,11 +18,18 @@
 
 
 	<form wicket:id="entryForm">
+
 		<div><label>Name </label><input
 				wicket:id="name"
 				type="text" style="width: 15em" /></div>
 		<div><label>Description </label><input
 				wicket:id="description" type="text" style="width: 30em"
+		/></div>
+		<div><label>Due Date </label><input
+				wicket:id="dueDates" type="text" style="width: 30em"
+		/></div>
+		<div><label>Project Title </label><input
+				wicket:id="projectTitle" type="text" style="width: 30em"
 		/></div>
 		<div><input type="submit" value="Add" /></div>
 	</form>
@@ -38,7 +45,8 @@
 				<input class="toggle" type="checkbox" wicket:id="completed" />
 				<span wicket:id="name">Name</span>
 				<span wicket:id="description">Description</span>
-
+				<span wicket:id="dueDates">Due date</span>
+				<span wicket:id="projectTitle">Project Title</span>
 			</td>
 		</tr>
 	</table>
@@ -46,6 +54,12 @@
 	</form>
 
 	<a href="#" wicket:id="selectAll">Select all</a>
+	<a href="#" wicket:id="ClearCompleted">Clear completed</a>
+	<br/>
+	<a href="#" wicket:id="showCompleted">Show Completed Tasks</a>
+	
+	
+<br/> Number of inactive tasks:	<span id="inactiveCount" wicket:id="inactiveCount"></span>
 
 	<hr>
 	<footer>

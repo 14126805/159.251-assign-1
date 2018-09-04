@@ -10,11 +10,13 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PropertyListView;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.resource.ResourceReference;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,15 +41,20 @@ public class TasksPage extends WebPage {
 		TaskList collection = app.getTaskList();
 		List<Task> tasks = collection.getTasks();
 
+		Label countLabel = new Label("inactiveCount", new PropertyModel(collection,"InactiveCount"));
+		add(countLabel);
+		
+		
 		PropertyListView taskListView =
 				new PropertyListView("task_list", tasks) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void populateItem(ListItem item) {
-
 						item.add(new Label("name"));
 						item.add(new Label("description"));
+						item.add(new Label("dueDates"));
+						item.add(new Label("projectTitle"));
 
 						item.add(new AjaxCheckBox("completed") {
 							@Override
@@ -63,11 +70,52 @@ public class TasksPage extends WebPage {
 				for(Task t: tasks) {
 					t.setComplete(true);
 				}
-
+			}
+		});
+		
+		add(new Link<Void>("ClearCompleted") {
+			@Override
+			public void onClick() {
+				List<Task> forRemoval = new ArrayList<Task>();
+				for(Task t: tasks) {
+					if(!t.isComplete())
+						forRemoval.add(t);
+				}
+				tasks.removeAll(forRemoval);
 			}
 		});
 
-
+		add(new Link<Void>("showCompleted") {
+		@Override
+		public void onClick() {
+			List<Task> forRemoval = new ArrayList<Task>();
+			for(Task t: tasks) {
+				if(t.isComplete())
+					forRemoval.add(t);
+			}
+			tasks.removeAll(forRemoval);
+		}
+	});
+		
+		
+//		add(new Link<Void>("showActive") {
+//		@Override
+//		public void onClick() {
+//			List<Task> forRemoval = new ArrayList<Task>();
+//			List<Task> baseLine = new ArrayList<Task>();
+//			
+//			for(Task t: tasks) {
+//				baseLine.add(t);
+//				if(t.isComplete())
+//					forRemoval.add(t);
+//			}
+//			
+//			baseLine.removeAll(forRemoval);
+//		}
+//	});
+		
+		
+		
 		listForm.add(taskListView);
 
 	}
