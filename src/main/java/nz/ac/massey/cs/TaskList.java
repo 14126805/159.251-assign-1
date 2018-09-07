@@ -33,7 +33,7 @@ public class TaskList implements Serializable {
      
     
     public long getInactiveCount() {
-    	return collection.stream().filter(task-> task.isComplete()).count();
+    	return collection.stream().filter(task-> !task.isComplete()).count();
     }
 
     

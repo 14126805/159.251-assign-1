@@ -1,5 +1,14 @@
 package nz.ac.massey.cs;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.apache.wicket.MarkupContainer;
@@ -28,7 +37,8 @@ public class EntryForm extends Form<Void> {
         add(nameField);
         add(descriptionField);  
     }
-
+    Method method;
+    
     // adds the task when the form is submitted (by clicking the Add button)
     protected void onSubmit() {
         super.onSubmit();
@@ -36,7 +46,17 @@ public class EntryForm extends Form<Void> {
         String description = (String)descriptionField.getDefaultModelObject();
         String dueDates = (String)dueDateField.getDefaultModelObject();
         String projectTitle = (String)projectTitleField.getDefaultModelObject();
-             
+      
+        //Setup the writer to store information
+		BufferedWriter bw;
+		try {
+			bw = new BufferedWriter(new FileWriter("reader.csv",true));
+			String xxx = name+","+description+","+dueDates+","+projectTitle+","+"X";
+			bw.write(xxx);
+			bw.newLine();
+			bw.close();			
+		}catch (IOException e) {e.printStackTrace();}
+        
         descriptionField.clearInput();
         descriptionField.setModelObject(null);
         nameField.clearInput();
@@ -49,6 +69,5 @@ public class EntryForm extends Form<Void> {
         WicketApplication app = (WicketApplication) this.getApplication();
         TaskList collection = app.getTaskList();
         collection.addTask(new Task(name, dueDates,projectTitle));
-
     }
 }
