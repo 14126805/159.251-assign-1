@@ -21,6 +21,93 @@ public class Task implements Serializable {
     private String dueDates;
     private String projectTitle;
 
+    
+/////////////////////////////////////////////
+public String getDescription()
+{
+return description;
+}
+
+public void setDescription(String sdescription)
+{
+this.description = sdescription;
+}
+
+/////////////////////////////////////////////
+
+public boolean getCompleted()
+{
+return completed;
+}
+
+public void setCompleted(Boolean scompleted)
+{
+this.completed = scompleted;
+}
+
+/////////////////////////////////////////////
+public String getName()
+{
+return name;
+}
+
+public void setname(String sname)
+{
+this.name = sname;
+}
+/////////////////////////////////////////////
+
+public Integer getId()
+{
+return id;
+}
+
+public void setId(int sid)
+{
+this.id = sid;
+}
+
+
+
+/////////////////////////////////////////////
+public Date getDate() 
+{
+return date;
+}
+
+public void setDate(Date sdate)
+{
+this.date = sdate;
+}
+
+/////////////////////////////////////////////
+
+public String getdueDate() 
+{
+return dueDates;
+}
+
+public void setdueDate(String sdueDates)
+{
+this.dueDates = sdueDates;
+}
+
+/////////////////////////////////////////////
+public String getprojectTitle()
+{
+return projectTitle;
+}
+
+public void setprojectTitle(String sprojectTitle)
+{
+this.projectTitle = sprojectTitle;
+}
+
+/////////////////////////////////////////////
+    
+    
+    
+    
 
     public Task(String name, String dueDates, String projectTitle) {
         this.name = name;
@@ -29,6 +116,17 @@ public class Task implements Serializable {
         this.dueDates = dueDates;
         this.projectTitle = projectTitle;
     }
+    
+    public Task()
+    {
+ 	   this.name = "";
+        this.description = "";
+        this.completed = false;
+        this.dueDates = "";
+        this.projectTitle = "";
+    }
+     
+     
     
     //THIS IS FOR A FAILED ATTEMPT AT CSV WRITING, It's close to working
     public static ArrayList<Task> reader() {
@@ -61,10 +159,6 @@ public class Task implements Serializable {
 	
     public boolean isComplete() {
         return completed;
-    }
-    
-    public String getdueDate() {
-    	return dueDates;
     }
     
     

@@ -14,7 +14,24 @@ public class TaskList implements Serializable {
     public TaskList() {
         collection = new LinkedList<Task>();
     }
-
+    
+    //////////////////////////////////////////////////
+    public List<Task> getCollection()
+    {
+    	return collection;
+    }
+    
+    
+    
+    public void setCollection(List<Task> scollection)
+    {
+    	 this.collection = scollection;
+    }
+    //////////////////////////////////////////////////
+    
+    
+    
+    
     public List<Task> getTasks() {
         return collection;
     }

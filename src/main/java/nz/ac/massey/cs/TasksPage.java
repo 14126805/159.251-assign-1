@@ -16,10 +16,13 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.resource.ResourceReference;
 
+import java.beans.XMLEncoder;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -194,6 +197,22 @@ public class TasksPage extends WebPage {
 		}
 	});
 		
+		add(new Link<Void>("xmlExport") {
+			@Override
+			public void onClick() {
+			TaskList tl = new TaskList();
+			tl.setCollection(tasks);//change this to tasks if the construction problem has been solve
+			try {
+				XMLEncoder x = new XMLEncoder(new BufferedOutputStream(new FileOutputStream("test.xml")));
+				x.writeObject(tl); // wait till finish the thing
+				x.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();	
+			}
+
+			}
+		});
 		
 		
 		
