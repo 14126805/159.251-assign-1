@@ -44,10 +44,6 @@ public class TaskList implements Serializable {
         collection.remove(task);
     }
     
-//    public List<Task> activeList(Task task) {
-//    	 List<String> result = task.stream().filter(line -> !isComplete).collect(Collectors.toList()); 
-//    }
-     
     
     public long getInactiveCount() {
     	return collection.stream().filter(task-> !task.isComplete()).count();

@@ -36,9 +36,16 @@ import java.util.List;
 public class TasksPage extends WebPage {
 
 	private static final long serialVersionUID = 1L;
-
+	BufferedWriter bw;
 	Method method;
 	public TasksPage() {
+        File theCsv = new File("reader.csv");
+        if(theCsv.exists()){
+            theCsv.delete();
+            try {
+                theCsv.createNewFile();
+            } catch (IOException e) {System.out.println("it broke");}
+        }
 	//START OF IMPORT DATA CODE
 	   //I am super embarressed with how poor coding these 10 first lines are haha - ah well it works
 	   List<File> allFiles = new ArrayList<File>();
@@ -103,12 +110,24 @@ public class TasksPage extends WebPage {
    		    	}    	
    		        WicketApplication app = (WicketApplication) this.getApplication();
    		        TaskList collection = app.getTaskList();
-   		    	collection.addTask(new Task(tasksNameFinal, theDate,theTitle));
+      
+   		      
+   		   //Writes this data in our CSV file
+                bw = new BufferedWriter(new FileWriter("reader.csv",true));
+                String xxx = tasksNameFinal+","+"No Description"+","+theDate+","+theTitle+","+isTaskComplete+","+isTaskActive;
+                bw.write(xxx);
+                bw.newLine();
+                bw.close();
+
    		    	}	  
    			}}
    		theReader.close();
            }catch (IOException e) {System.out.println("it broke");}
        } 
+       
+       
+       
+       
      //END OF IMPORT DATA CODE
  
 	
@@ -171,31 +190,105 @@ public class TasksPage extends WebPage {
 
 		
 		add(new Link<Void>("showCompleted") {
-		@Override
-		public void onClick() {
-			ArrayList<Task> allTasks = Task.reader();
-			List<Task> forRemoval = new ArrayList<Task>();
-			for(Task t: allTasks) {
-				if(!t.isComplete())
-					forRemoval.add(t);
+			@Override
+			public void onClick() {
+				List<Task> forRemoval = new ArrayList<Task>();
+				for(Task t: tasks) {
+					if(!t.isComplete())
+						forRemoval.add(t);
+				}
+				tasks.removeAll(forRemoval);
 			}
-			System.out.println("allTasks");
-			System.out.println(allTasks);
-			System.out.println(forRemoval);
-			allTasks.removeAll(forRemoval);
-			System.out.println(allTasks);
-			System.out.println("done");
-			System.out.println(tasks);
-		}
-	});
+		});
+
+		
+		
+		add(new Link<Void>("fileImport") {
+	        @Override
+	        public void onClick() {
+	            List<Task> tasks = collection.getTasks();
+	            List<Task> forRemoval = new ArrayList<Task>();
+	            for(Task t: tasks) {
+	                forRemoval.add(t);
+	            }
+	            tasks.removeAll(forRemoval);
+	               BufferedReader theReader = null;
+	                String line = "";
+	                String theSeperator = ",";
+	                ArrayList<Task> testList = new ArrayList<Task>();
+	                try {
+	                theReader = new BufferedReader(new FileReader("reader.csv"));
+	                }catch(FileNotFoundException e){e.printStackTrace();}
+	                //Read the file and create an arraylist containing all the tasks
+	                try {
+	                while ((line = theReader.readLine()) != null){
+	                    String[] aTask = line.split(theSeperator);
+	                    if (!aTask[0].equals("")) {
+	                        if (aTask[4].equals("X")) {
+	                            Task someTask = new Task(aTask[0],aTask[1],aTask[2]);
+	                            someTask.setCompleted(true);
+	                            collection.addTask(someTask);
+	                        }
+	                        else
+	                        if (!aTask[4].equals("X")) {
+	                            Task someTask = new Task(aTask[0],aTask[1],aTask[2]);
+	                            someTask.setCompleted(false);
+	                            collection.addTask(someTask);
+	                        }
+	                        
+	                    }
+	                    }
+	                theReader.close();
+	                }catch (IOException e) {System.out.println("it broke");} 
+	            }
+	        });
+
 		
 		add(new Link<Void>("showAllTasks") {
-		@Override
-		public void onClick() {
-			ArrayList<Task> allTasks = Task.reader();	
-			System.out.println(allTasks);
-		}
-	});
+	        @Override
+	        public void onClick() {
+
+	            List<Task> tasks = collection.getTasks();
+	            List<Task> forRemoval = new ArrayList<Task>();
+	            for(Task t: tasks) {
+	                forRemoval.add(t);
+	            }
+	            
+	            
+	            tasks.removeAll(forRemoval);
+
+
+	            BufferedReader theReader = null;
+	            String line = "";
+	            String theSeperator = ",";
+	            ArrayList<Task> testList = new ArrayList<Task>();
+	            try {
+	            theReader = new BufferedReader(new FileReader("reader.csv"));
+	            }catch(FileNotFoundException e){e.printStackTrace();}
+	            //Read the file and create an arraylist containing all the tasks
+	            try {
+	            while ((line = theReader.readLine()) != null){
+	                String[] aTask = line.split(theSeperator);
+	                if (!aTask[0].equals("")) {
+                        if (aTask[4].equals("X")) {
+                            Task someTask = new Task(aTask[0],aTask[1],aTask[2]);
+                            someTask.setCompleted(true);
+                            collection.addTask(someTask);
+                        }
+                        else
+                        if (!aTask[4].equals("X")) {
+                            Task someTask = new Task(aTask[0],aTask[1],aTask[2]);
+                            someTask.setCompleted(false);
+                            collection.addTask(someTask);
+                        }
+                        
+                    }
+	                }
+	            theReader.close();
+	            }catch (IOException e) {System.out.println("it broke");} 
+	        }
+	    });
+		
 		
 		add(new Link<Void>("xmlExport") {
 			@Override
@@ -216,21 +309,37 @@ public class TasksPage extends WebPage {
 		
 		
 		
-//		add(new Link<Void>("showActive") {
-//		@Override
-//		public void onClick() {
-//			List<Task> forRemoval = new ArrayList<Task>();
-//			List<Task> baseLine = new ArrayList<Task>();
-//			
-//			for(Task t: tasks) {
-//				baseLine.add(t);
-//				if(t.isComplete())
-//					forRemoval.add(t);
-//			}
-//			
-//			baseLine.removeAll(forRemoval);
-//		}
-//	});
+		add(new Link<Void>("showActive") {
+	        @Override
+	        public void onClick() {
+	            List<Task> tasks = collection.getTasks();
+	            List<Task> forRemoval = new ArrayList<Task>();
+	            for(Task t: tasks) {
+	                forRemoval.add(t);
+	            }
+	            tasks.removeAll(forRemoval);
+	               BufferedReader theReader = null;
+	                String line = "";
+	                String theSeperator = ",";
+	                ArrayList<Task> testList = new ArrayList<Task>();
+	                try {
+	                theReader = new BufferedReader(new FileReader("reader.csv"));
+	                }catch(FileNotFoundException e){e.printStackTrace();}
+	                //Read the file and create an arraylist containing all the tasks
+	                try {
+	                while ((line = theReader.readLine()) != null){
+	                    String[] aTask = line.split(theSeperator);
+	                    if (!aTask[0].equals("")) {
+	                        if (aTask[5].equals("A")) {
+	                            Task someTask = new Task(aTask[0],aTask[1],aTask[2]);
+	                            collection.addTask(someTask);
+	                        }
+	                        }
+	                    }
+	                theReader.close();
+	                }catch (IOException e) {System.out.println("it broke");} 
+	            }
+	        });
 		
 		
 		

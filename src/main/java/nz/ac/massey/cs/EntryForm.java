@@ -51,7 +51,7 @@ public class EntryForm extends Form<Void> {
 		BufferedWriter bw;
 		try {
 			bw = new BufferedWriter(new FileWriter("reader.csv",true));
-			String xxx = name+","+description+","+dueDates+","+projectTitle+","+"X";
+			String xxx = name+","+description+","+dueDates+","+projectTitle+","+"X"+","+"A";
 			bw.write(xxx);
 			bw.newLine();
 			bw.close();			
